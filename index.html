@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whyte Plumbing & Heating Ltd | Kinross, Scotland</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dark: #0a0f1a;
+  --navy: #0d1f3c;
+  --blue: #133366;
+  --fire: #f4730a;
+  --fire-glow: #ff9240;
+  --ice: #4ab8e8;
+  --white: #ffffff;
+  --muted: #8898aa;
+  --card-bg: #111927;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Barlow', sans-serif; background: var(--dark); color: var(--white); overflow-x: hidden; }
+
+/* CURSOR */
+*, *::before, *::after { cursor: none !important; }
+.cursor { position: fixed; width: 12px; height: 12px; background: var(--fire); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s; }
+.cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(244,115,10,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 3rem; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,15,26,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.3s; }
+nav.scrolled { height: 60px; background: rgba(10,15,26,0.98); }
+.nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; color: var(--white); text-decoration: none; }
+.nav-logo em { color: var(--fire); font-style: normal; }
+.nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+.nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.87rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; position: relative; }
+.nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px; background: var(--fire); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-call { background: var(--fire) !important; color: var(--white) !important; padding: 0.6rem 1.5rem; border-radius: 3px; font-weight: 700 !important; transition: box-shadow 0.2s !important; }
+.nav-call:hover { box-shadow: 0 0 22px rgba(244,115,10,0.6) !important; }
+.nav-call::after { display: none !important; }
+
+/* HERO */
+.hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; padding-top: 72px; }
+.hero-bg { position: absolute; inset: 0; z-index: 0; background: var(--dark); overflow: hidden; }
+.hero-bg::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 30% 50%, rgba(19,51,102,0.85) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 70% 30%, rgba(244,115,10,0.07) 0%, transparent 60%); }
+.grid-lines { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 80px 80px; animation: gridDrift 25s linear infinite; }
+@keyframes gridDrift { 0% { transform: translate(0,0); } 100% { transform: translate(80px,80px); } }
+.particles { position: absolute; inset: 0; pointer-events: none; }
+.particle { position: absolute; border-radius: 50%; animation: floatUp linear infinite; opacity: 0; }
+@keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.2; } 100% { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+
+.hero-left { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: center; padding: 5rem 4rem 5rem 5rem; }
+.hero-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; animation: fadeIn 0.8s 0.3s both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.eyebrow-line { height: 2px; width: 40px; background: var(--fire); }
+.eyebrow-text { font-size: 0.75rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--fire); }
+.hero h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(3.8rem, 7vw, 6.5rem); line-height: 0.9; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 2rem; animation: heroSlide 0.8s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+@keyframes heroSlide { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.hero h1 .line-fire { color: var(--fire); display: block; }
+.hero h1 .line-ghost { color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.25); display: block; }
+.hero-desc { font-size: 1.05rem; color: rgba(255,255,255,0.55); line-height: 1.75; max-width: 460px; margin-bottom: 2.5rem; font-weight: 300; animation: fadeIn 0.8s 0.4s both; }
+.hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeIn 0.8s 0.55s both; }
+.btn-fire { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--fire); color: var(--white); padding: 1rem 2rem; border-radius: 3px; font-weight: 700; font-size: 0.95rem; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase; position: relative; overflow: hidden; transition: all 0.3s; }
+.btn-fire:hover { box-shadow: 0 0 30px rgba(244,115,10,0.65); transform: translateY(-2px); }
+.btn-ghost { display: inline-flex; align-items: center; gap: 0.6rem; color: var(--white); padding: 1rem 2rem; border-radius: 3px; font-weight: 600; font-size: 0.95rem; text-decoration: none; letter-spacing: 0.5px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.18); transition: all 0.3s; }
+.btn-ghost:hover { border-color: var(--fire); color: var(--fire); }
+.hero-stats { display: flex; gap: 0; margin-top: 3.5rem; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 2.5rem; animation: fadeIn 0.8s 0.7s both; }
+.hero-stat { flex: 1; padding-right: 2rem; border-right: 1px solid rgba(255,255,255,0.07); margin-right: 2rem; }
+.hero-stat:last-child { border-right: none; margin-right: 0; }
+.stat-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 2.8rem; color: var(--fire); line-height: 1; }
+.stat-lbl { font-size: 0.72rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.3rem; }
+
+/* HERO RIGHT — MOSAIC */
+.hero-right { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; padding: 4rem 3rem 4rem 1rem; animation: fadeIn 1s 0.4s both; }
+.hero-mosaic { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; width: 100%; max-width: 480px; height: 480px; }
+.mosaic-cell { border-radius: 8px; overflow: hidden; position: relative; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); }
+.mosaic-cell.tall { grid-row: span 2; }
+.mosaic-cell img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8) saturate(0.9); transition: transform 0.4s, filter 0.3s; }
+.mosaic-cell:hover img { transform: scale(1.06); filter: brightness(1) saturate(1.1); }
+.img-ph { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg,#111927,#0d1828); border: 2px dashed rgba(244,115,10,0.3); color: rgba(255,255,255,0.28); font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; text-align: center; gap: 0.4rem; transition: all 0.3s; }
+.img-ph:hover { border-color: var(--fire); color: var(--fire); }
+.img-ph .ph-icon { font-size: 1.8rem; }
+.mosaic-badge { position: absolute; bottom: 8px; left: 8px; background: rgba(10,15,26,0.85); border: 1px solid rgba(244,115,10,0.3); backdrop-filter: blur(6px); border-radius: 3px; padding: 0.25rem 0.6rem; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--fire); }
+
+/* TICKER */
+.ticker { background: var(--fire); padding: 0.85rem 0; overflow: hidden; white-space: nowrap; }
+.ticker-inner { display: inline-flex; animation: ticker 28s linear infinite; }
+.ticker-item { display: inline-flex; align-items: center; gap: 0.8rem; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.9); padding: 0 2.5rem; }
+.ticker-dot { color: rgba(255,255,255,0.45); }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* SHARED SECTION STYLES */
+.section-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: var(--fire); display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.section-tag::before, .section-tag::after { content: ''; height: 1px; width: 30px; background: var(--fire); }
+.centered .section-tag { justify-content: center; }
+.section-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: clamp(2.4rem,5vw,4.2rem); text-transform: uppercase; letter-spacing: 2px; line-height: 0.95; color: var(--white); }
+.section-sub { font-size: 1rem; color: rgba(255,255,255,0.42); max-width: 540px; margin-top: 1.2rem; line-height: 1.7; font-weight: 300; }
+.centered { text-align: center; }
+.centered .section-sub { margin-left: auto; margin-right: auto; }
+
+/* ═══ SERVICES ═══ */
+#services { background: var(--dark); padding: 8rem 3rem; position: relative; }
+#services::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,rgba(244,115,10,0.4),transparent); }
+.services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5px; max-width: 1200px; margin: 4rem auto 0; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.04); }
+.service-card { background: var(--dark); padding: 2.5rem 2rem; position: relative; overflow: hidden; transition: background 0.3s; text-decoration: none; color: inherit; display: block; }
+.service-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(244,115,10,0.07) 0%, transparent 60%); opacity: 0; transition: opacity 0.3s; }
+.service-card:hover { background: #0d1525; }
+.service-card:hover::before { opacity: 1; }
+.service-num { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 4rem; color: rgba(255,255,255,0.04); position: absolute; top: 1rem; right: 1.5rem; line-height: 1; transition: color 0.3s; }
+.service-card:hover .service-num { color: rgba(244,115,10,0.1); }
+.service-icon-wrap { width: 50px; height: 50px; background: rgba(244,115,10,0.1); border: 1px solid rgba(244,115,10,0.18); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 1.4rem; transition: all 0.3s; }
+.service-card:hover .service-icon-wrap { background: rgba(244,115,10,0.2); border-color: var(--fire); box-shadow: 0 0 18px rgba(244,115,10,0.2); }
+.service-card h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.45rem; text-transform: uppercase; letter-spacing: 1px; color: var(--white); margin-bottom: 0.6rem; }
+.service-card p { font-size: 0.87rem; color: rgba(255,255,255,0.42); line-height: 1.68; font-weight: 300; }
+.service-arrow { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--fire); font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 1.2rem; opacity: 0; transform: translateX(-8px); transition: all 0.3s; }
+.service-card:hover .service-arrow { opacity: 1; transform: translateX(0); }
+
+/* ═══ GALLERY ═══ */
+#gallery { background: #07111e; padding: 8rem 3rem; position: relative; }
+#gallery::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,rgba(74,184,232,0.3),transparent); }
+.gallery-grid { max-width: 1200px; margin: 4rem auto 0; display: grid; grid-template-columns: repeat(4,1fr); grid-template-rows: 220px 220px; gap: 10px; }
+.gallery-item { position: relative; overflow: hidden; border-radius: 6px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); }
+.gallery-item.wide { grid-column: span 2; }
+.gallery-item.tall { grid-row: span 2; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.75) saturate(0.85); transition: all 0.5s; }
+.gallery-item:hover img { filter: brightness(1) saturate(1.1); transform: scale(1.05); }
+.gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(10,15,26,0.85) 0%,transparent 55%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 1.2rem; }
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-overlay-text { font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--fire); }
+.gallery-ph { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg,#0d1525,#0a0f1a); border: 2px dashed rgba(74,184,232,0.18); color: rgba(255,255,255,0.2); font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; text-align: center; gap: 0.4rem; transition: all 0.3s; }
+.gallery-ph:hover { border-color: rgba(74,184,232,0.45); color: rgba(74,184,232,0.55); }
+.gallery-ph .ph-icon { font-size: 1.7rem; margin-bottom: 0.2rem; }
+.gallery-note { text-align: center; margin-top: 1.5rem; color: rgba(255,255,255,0.3); font-size: 0.82rem; line-height: 1.65; max-width: 1200px; margin-left: auto; margin-right: auto; }
+.gallery-note code { color: #4ab8e8; background: rgba(74,184,232,0.1); padding: 1px 6px; border-radius: 3px; font-size: 0.82rem; }
+
+/* ═══ ABOUT ═══ */
+#about { background: var(--navy); padding: 8rem 3rem; position: relative; overflow: hidden; }
+#about::before { content: 'WHYTE'; position: absolute; font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 20rem; color: rgba(255,255,255,0.02); letter-spacing: -8px; top: 50%; left: 50%; transform: translate(-50%,-50%); white-space: nowrap; pointer-events: none; }
+.about-layout { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+.about-left .section-tag { justify-content: flex-start; }
+.about-left .section-tag::before { display: none; }
+.about-copy { font-size: 1rem; color: rgba(255,255,255,0.52); line-height: 1.8; font-weight: 300; margin-top: 1.4rem; }
+.about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; }
+.feature { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 1.2rem; transition: all 0.3s; }
+.feature:hover { background: rgba(244,115,10,0.07); border-color: rgba(244,115,10,0.2); }
+.feature-title { font-size: 0.82rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--white); margin-bottom: 0.3rem; }
+.feature-desc { font-size: 0.8rem; color: rgba(255,255,255,0.38); line-height: 1.5; }
+.accred-card { display: flex; align-items: center; gap: 1.2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-left: 3px solid var(--fire); border-radius: 0 8px 8px 0; padding: 1.2rem 1.5rem; margin-bottom: 1rem; transition: all 0.3s; position: relative; overflow: hidden; }
+.accred-card:hover { transform: translateX(5px); }
+.accred-icon { font-size: 1.9rem; width: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.accred-info strong { display: block; color: var(--white); font-size: 0.93rem; font-weight: 600; margin-bottom: 0.2rem; }
+.accred-info span { font-size: 0.78rem; color: rgba(255,255,255,0.38); }
+
+/* ═══ TESTIMONIALS ═══ */
+#testimonials { background: var(--dark); padding: 8rem 3rem; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; max-width: 1100px; margin: 4rem auto 0; }
+.testimonial { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 2rem; transition: all 0.3s; }
+.testimonial:hover { transform: translateY(-4px); border-color: rgba(244,115,10,0.2); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+.quote-mark { font-family: 'Barlow Condensed', sans-serif; font-size: 5rem; line-height: 0.5; color: rgba(244,115,10,0.2); font-weight: 900; margin-bottom: 1rem; display: block; }
+.stars { color: var(--fire); margin-bottom: 0.8rem; letter-spacing: 2px; font-size: 0.85rem; }
+.t-text { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.7; font-weight: 300; margin-bottom: 1.5rem; }
+.t-author strong { color: var(--white); font-weight: 600; font-size: 0.9rem; display: block; }
+.t-author span { color: rgba(255,255,255,0.32); font-size: 0.78rem; }
+
+/* ═══ CONTACT ═══ */
+#contact { background: #060d18; padding: 8rem 3rem; position: relative; }
+#contact::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,rgba(244,115,10,0.4),transparent); }
+.contact-layout { max-width: 1100px; margin: 4rem auto 0; display: grid; grid-template-columns: 1fr 1.3fr; gap: 5rem; align-items: start; }
+.contact-header { max-width: 1100px; margin: 0 auto; }
+.contact-item { display: flex; align-items: center; gap: 1.2rem; padding: 1.1rem 1.4rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; text-decoration: none; color: inherit; transition: all 0.3s; margin-bottom: 0.85rem; }
+.contact-item:hover { border-color: rgba(244,115,10,0.3); background: rgba(244,115,10,0.05); transform: translateX(4px); }
+.contact-item-icon { width: 42px; height: 42px; flex-shrink: 0; background: rgba(244,115,10,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+.contact-item strong { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--fire); margin-bottom: 0.2rem; }
+.contact-item span { font-size: 0.93rem; color: rgba(255,255,255,0.65); }
+.contact-form { display: flex; flex-direction: column; gap: 0.9rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+.form-group label { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+.form-group input, .form-group select, .form-group textarea { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 0.85rem 1rem; color: var(--white); font-family: 'Barlow', sans-serif; font-size: 0.93rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; width: 100%; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--fire); box-shadow: 0 0 0 3px rgba(244,115,10,0.1); }
+.form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.18); }
+.form-group select option { background: #0d1525; }
+.form-group textarea { resize: vertical; min-height: 115px; }
+.form-submit { background: var(--fire); color: var(--white); border: none; border-radius: 4px; padding: 1.1rem 2rem; font-family: 'Barlow', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s; position: relative; }
+.form-submit:hover { box-shadow: 0 0 28px rgba(244,115,10,0.55); transform: translateY(-2px); }
+
+/* FOOTER */
+footer { background: #030810; padding: 2.5rem 3rem; border-top: 1px solid rgba(255,255,255,0.04); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.15rem; letter-spacing: 3px; text-transform: uppercase; }
+.footer-logo em { color: var(--fire); font-style: normal; }
+footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; text-align: right; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 4rem 2rem; }
+  .services-grid { grid-template-columns: repeat(2,1fr); }
+  .gallery-grid { grid-template-columns: repeat(2,1fr); grid-auto-rows: 200px; }
+  .gallery-item.wide, .gallery-item.tall { grid-column: auto; grid-row: auto; }
+  .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 1.5rem; }
+  .nav-links { display: none; }
+  #services, #gallery, #about, #testimonials, #contact { padding: 5rem 1.5rem; }
+  .services-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .about-features { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; }
+  footer p { text-align: left; }
+}
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">WHYTE <em>PLUMBING &amp; HEATING</em></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Our Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact" class="nav-call">📞 Call Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="grid-lines"></div>
+    <div class="particles" id="particles"></div>
+  </div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Kinross · Scotland · Est. 2016</span>
+    </div>
+    <h1>
+      <span>PLUMBING</span>
+      <span class="line-fire">&amp; HEATING</span>
+      <span class="line-ghost">SPECIALISTS</span>
+    </h1>
+    <p class="hero-desc">Gas Safe registered engineers serving Kinross and the surrounding areas. From emergency call-outs to full renewable energy systems — done properly, every time.</p>
+    <div class="hero-ctas">
+      <a href="tel:+447875373988" class="btn-fire">📞 Call David — 07875 373 988</a>
+      <a href="#contact" class="btn-ghost">Free Quote →</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-lbl">Emergency Cover</div></div>
+      <div class="hero-stat"><div class="stat-num">GAS</div><div class="stat-lbl">Safe Registered</div></div>
+      <div class="hero-stat"><div class="stat-num">RECC</div><div class="stat-lbl">Renewables Certified</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-mosaic">
+      <!-- Tall left cell -->
+      <div class="mosaic-cell tall">
+        <!--
+          TO ADD A PHOTO: Replace the img-ph div below with:
+          <img src="images/photo1.jpg" alt="Boiler installation">
+        -->
+        <div class="img-ph">
+          <div class="ph-icon">🔧</div>
+          Add Photo<br><small style="font-size:0.62rem;opacity:0.5;margin-top:4px;">e.g. boiler install</small>
+        </div>
+        <div class="mosaic-badge">Boiler Install</div>
+      </div>
+      <!-- Top right -->
+      <div class="mosaic-cell">
+        <div class="img-ph">
+          <div class="ph-icon">🚿</div>
+          Add Photo
+        </div>
+        <div class="mosaic-badge">Bathroom Fit</div>
+      </div>
+      <!-- Bottom right -->
+      <div class="mosaic-cell">
+        <div class="img-ph">
+          <div class="ph-icon">☀️</div>
+          Add Photo
+        </div>
+        <div class="mosaic-badge">Renewables</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Gas Safe Registered <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">RECC Approved Installer <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Approved Code Member <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Kinross &amp; Surrounding Areas <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Emergency Call-Outs 24/7 <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Free Quotes <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Gas Safe Registered <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">RECC Approved Installer <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Approved Code Member <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Kinross &amp; Surrounding Areas <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Emergency Call-Outs 24/7 <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">Free Quotes <span class="ticker-dot">◆</span></span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-header centered">
+    <div class="section-tag">What We Do</div>
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-sub">Fully certified and insured for every job — from a dripping tap to a full renewable heating system.</p>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <div class="service-icon-wrap">🔧</div>
+        <h3>Plumbing</h3>
+        <p>Leak repairs, pipe installation, kitchen and bathroom plumbing. Residential and commercial work covered.</p>
+        <div class="service-arrow">Find Out More →</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">02</div>
+        <div class="service-icon-wrap">🔥</div>
+        <h3>Boiler Installation</h3>
+        <p>Gas Safe registered installations and replacements. All major brands. Annual servicing and safety certificates.</p>
+        <div class="service-arrow">Find Out More →</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">03</div>
+        <div class="service-icon-wrap">🏠</div>
+        <h3>Central Heating</h3>
+        <p>New systems, radiator fitting, underfloor heating and power flushing. Warm homes, efficiently heated.</p>
+        <div class="service-arrow">Find Out More →</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">04</div>
+        <div class="service-icon-wrap">☀️</div>
+        <h3>Renewable Energy</h3>
+        <p>RECC-certified heat pump and solar thermal installations. Reduce bills and your carbon footprint.</p>
+        <div class="service-arrow">Find Out More →</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">05</div>
+        <div class="service-icon-wrap">🚿</div>
+        <h3>Bathroom Fitting</h3>
+        <p>Full design and installation of bathrooms, en-suites and wet rooms. Quality fixtures, expert finish.</p>
+        <div class="service-arrow">Find Out More →</div>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-num">06</div>
+        <div class="service-icon-wrap">🆘</div>
+        <h3>Emergency Call-Out</h3>
+        <p>Burst pipes, boiler failure, no heating or hot water. We respond fast when you need it most.</p>
+        <div class="service-arrow">Call David Now →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUR WORK / GALLERY -->
+<section id="gallery">
+  <div class="section-header centered">
+    <div class="section-tag">Portfolio</div>
+    <h2 class="section-title">Our Work</h2>
+    <p class="section-sub">A selection of completed jobs across Kinross and the surrounding area.</p>
+  </div>
+
+  <div class="gallery-grid">
+    <!--
+    ════════════════════════════════════════════════════════
+    HOW TO ADD YOUR OWN JOB PHOTOS — IT'S SIMPLE!
+    ════════════════════════════════════════════════════════
+    1. Create a folder called "images" next to this file
+    2. Copy your photos in (e.g. job1.jpg, job2.jpg)
+    3. For each placeholder below, replace:
+         <div class="gallery-ph">...</div>
+       with:
+         <img src="images/job1.jpg" alt="Job description">
+    ════════════════════════════════════════════════════════
+    -->
+    <div class="gallery-item wide reveal">
+      <div class="gallery-ph" style="height:220px;">
+        <div class="ph-icon">📸</div>
+        Add Your Photo Here<br><small style="font-size:0.62rem;opacity:0.45">Wide slot — bathroom, kitchen etc.</small>
+      </div>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Bathroom Installation</div></div>
+    </div>
+    <div class="gallery-item tall reveal">
+      <div class="gallery-ph" style="height:452px;">
+        <div class="ph-icon">📸</div>
+        Add Your Photo Here<br><small style="font-size:0.62rem;opacity:0.45">Tall slot — boiler, pipework etc.</small>
+      </div>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Boiler Install</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Central Heating</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Heat Pump Install</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Plumbing Works</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Bathroom Fit</div></div>
+    </div>
+  </div>
+
+  <p class="gallery-note" style="margin-top:1.5rem;">
+    📁 <strong style="color:rgba(255,255,255,0.45);">To add your photos:</strong> Create an <code>images/</code> folder next to this file → add your photos → swap each placeholder with <code>&lt;img src="images/yourphoto.jpg" alt="Job description"&gt;</code>
+  </p>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-layout">
+    <div class="about-left">
+      <div class="section-tag">About Us</div>
+      <h2 class="section-title">Local.<br>Trusted.<br>Certified.</h2>
+      <p class="about-copy">Whyte Plumbing &amp; Heating Ltd has been serving Kinross and the surrounding area since 2016. Founded by David Whyte, we're a fully accredited, family-run business built on straight talking, fair pricing, and getting the job done right — first time.</p>
+      <p class="about-copy" style="margin-top:1rem;">As a member of the Approved Code Scheme and a RECC-certified renewable energy installer, you can trust that every job meets the highest standards — whether it's a leaky tap or a ground source heat pump.</p>
+      <div class="about-features">
+        <div class="feature reveal"><div class="feature-title">No Cold Calling</div><div class="feature-desc">We let our work speak for itself.</div></div>
+        <div class="feature reveal"><div class="feature-title">Transparent Pricing</div><div class="feature-desc">Honest quotes, no hidden extras.</div></div>
+        <div class="feature reveal"><div class="feature-title">Local Knowledge</div><div class="feature-desc">Kinross, Perth, Fife &amp; beyond.</div></div>
+        <div class="feature reveal"><div class="feature-title">Fully Insured</div><div class="feature-desc">All work protected and certified.</div></div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="accred-card reveal"><div class="accred-icon">🔥</div><div class="accred-info"><strong>Gas Safe Registered</strong><span>Legally qualified to work on all gas appliances and systems</span></div></div>
+      <div class="accred-card reveal"><div class="accred-icon">☀️</div><div class="accred-info"><strong>RECC Certified Installer</strong><span>Renewable Energy Consumer Code — your protection when going green</span></div></div>
+      <div class="accred-card reveal"><div class="accred-icon">🛡️</div><div class="accred-info"><strong>Approved Code Scheme Member</strong><span>Chartered Trading Standards backed — fair treatment guaranteed</span></div></div>
+      <div class="accred-card reveal"><div class="accred-icon">🏢</div><div class="accred-info"><strong>Companies House Registered</strong><span>Company No. SC530348 · Active since 2016</span></div></div>
+      <div class="accred-card reveal"><div class="accred-icon">📍</div><div class="accred-info"><strong>Based in Kinnesswood, Kinross</strong><span>Serving Kinross, Perth, Fife and surrounding areas</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-header centered">
+    <div class="section-tag">Reviews</div>
+    <h2 class="section-title">What Customers Say</h2>
+    <p class="section-sub">Don't just take our word for it.</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial reveal">
+      <span class="quote-mark">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="t-text">David fitted a new boiler for us last winter — professional from start to finish, tidy worker and a fair price. Wouldn't hesitate to recommend Whyte Plumbing to anyone in the area.</p>
+      <div class="t-author"><strong>James M.</strong><span>Kinross</span></div>
+    </div>
+    <div class="testimonial reveal">
+      <span class="quote-mark">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="t-text">Called them out for an emergency — pipe burst on a Sunday. David was there within the hour, sorted quickly and the price was very reasonable. Brilliant service, highly recommend.</p>
+      <div class="t-author"><strong>Susan T.</strong><span>Milnathort</span></div>
+    </div>
+    <div class="testimonial reveal">
+      <span class="quote-mark">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="t-text">Had a full bathroom fitted and a heat pump installed. The whole team was fantastic — on time, clean and the quality of the work is superb. Would use again without hesitation.</p>
+      <div class="t-author"><strong>Alan &amp; Karen P.</strong><span>Perth</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-header">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title">Request A <em style="color:var(--fire);font-style:normal;">Free Quote</em></h2>
+  </div>
+  <div class="contact-layout">
+    <div>
+      <a href="tel:+447875373988" class="contact-item">
+        <div class="contact-item-icon">📞</div>
+        <div><strong>Mobile</strong><span>+44 7875 373 988</span></div>
+      </a>
+      <a href="mailto:David@whyteplumbing-heatingltd.com" class="contact-item">
+        <div class="contact-item-icon">✉️</div>
+        <div><strong>Email</strong><span>David@whyteplumbing-heatingltd.com</span></div>
+      </a>
+      <div class="contact-item">
+        <div class="contact-item-icon">📍</div>
+        <div><strong>Location</strong><span>Kinnesswood, Kinross, KY13 9HN</span></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">⏰</div>
+        <div><strong>Hours</strong><span>Mon–Fri 8am–6pm · 24/7 Emergencies</span></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-item-icon">🗺️</div>
+        <div><strong>Coverage</strong><span>Kinross · Perth · Fife · Tayside</span></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group"><label>Your Name</label><input type="text" placeholder="John Smith"></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="07700 000 000"></div>
+      </div>
+      <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+      <div class="form-group">
+        <label>Service Needed</label>
+        <select>
+          <option value="">Select a service...</option>
+          <option>Plumbing Repair</option>
+          <option>Boiler Installation / Service</option>
+          <option>Central Heating System</option>
+          <option>Heat Pump / Renewable Energy</option>
+          <option>Bathroom Fitting</option>
+          <option>Emergency Call-Out</option>
+          <option>Other / Not Sure</option>
+        </select>
+      </div>
+      <div class="form-group"><label>About The Job</label><textarea placeholder="Briefly describe what you need..."></textarea></div>
+      <button class="form-submit" onclick="alert('Thanks! David will be in touch shortly.\n\nFor urgent jobs call: 07875 373 988')">Send Enquiry →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">WHYTE <em>PLUMBING &amp; HEATING</em> LTD</div>
+      <p style="text-align:left;margin-top:0.3rem;">Kinnesswood, Kinross, KY13 9HN · Company No. SC530348</p>
+    </div>
+    <p>Gas Safe Registered · RECC Approved · Approved Code Scheme Member<br>© 2025 Whyte Plumbing &amp; Heating Ltd. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+(function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
+document.querySelectorAll('a,button,.service-card,.gallery-item,.contact-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cursor.style.width='20px'; cursor.style.height='20px'; ring.style.width='56px'; ring.style.height='56px'; });
+  el.addEventListener('mouseleave',()=>{ cursor.style.width='12px'; cursor.style.height='12px'; ring.style.width='36px'; ring.style.height='36px'; });
+});
+
+// Scroll nav
+window.addEventListener('scroll',()=>{ document.getElementById('navbar').classList.toggle('scrolled',scrollY>50); });
+
+// Particles
+const pc=document.getElementById('particles');
+const cols=['#f4730a','#ff9240','#4ab8e8','rgba(255,255,255,0.6)'];
+for(let i=0;i<18;i++){
+  const p=document.createElement('div'); p.className='particle';
+  const s=Math.random()*3.5+1;
+  p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;background:${cols[Math.floor(Math.random()*cols.length)]};animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*10}s;`;
+  pc.appendChild(p);
+}
+
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
