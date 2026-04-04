@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://whyteplumbingandheating.co.uk/sitemap.xml
