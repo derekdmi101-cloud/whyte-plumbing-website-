@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
     saveSettings();
     scheduleAutoRefresh();
   });
+
+  // Auto-select "Cloud" gen when user pastes a shelly.cloud URL
+  document.getElementById('shellyUrl').addEventListener('input', function () {
+    if (isCloudUrl(this.value)) {
+      document.getElementById('shellyGen').value = 'cloud';
+    }
+  });
 });
 
 // ─── SETTINGS (localStorage) ───────────────────────────────────────────────
@@ -238,6 +245,37 @@ async function updateTariff() {
   }
 }
 
+// ─── CLOUD URL HELPERS ─────────────────────────────────────────────────────
+function isCloudUrl(url) {
+  return url.includes('shelly.cloud');
+}
+
+/**
+ * Parse a Shelly Cloud URL of the form:
+ * https://shelly-239-eu.shelly.cloud/v2/users/{user}/{payload}.{sig}
+ * Returns { server, token, deviceId }
+ */
+function parseCloudUrl(url) {
+  const u    = new URL(url);
+  const server = u.origin;                              // https://shelly-239-eu.shelly.cloud
+  const parts  = u.pathname.split('/').filter(Boolean); // ['v2','users','username','token']
+  const token  = parts[parts.length - 1];               // full token string
+
+  let deviceId = null;
+  try {
+    // Token is {base64_payload}.{signature} — decode payload to get device id
+    const payloadB64 = token.split('.')[0];
+    // atob needs standard base64 (add padding)
+    const padded = payloadB64 + '='.repeat((4 - payloadB64.length % 4) % 4);
+    const payload = JSON.parse(atob(padded));
+    deviceId = payload.id;
+  } catch (e) {
+    console.warn('[Shelly Cloud] Could not decode device ID from token:', e.message);
+  }
+
+  return { server, token, deviceId };
+}
+
 // ─── SHELLY CONTROL ────────────────────────────────────────────────────────
 async function shellyOn(triggerPrice) {
   await shellySwitch(true, triggerPrice);
@@ -248,60 +286,114 @@ async function shellyOff(triggerPrice) {
 }
 
 async function shellySwitch(on, triggerPrice) {
-  const baseUrl = document.getElementById('shellyUrl').value.trim().replace(/\/$/, '');
-  if (!baseUrl) {
-    setStatus('Enter your Shelly URL first.', 'warn');
-    return;
-  }
+  const rawUrl  = document.getElementById('shellyUrl').value.trim().replace(/\/$/, '');
+  if (!rawUrl) { setStatus('Enter your Shelly URL first.', 'warn'); return; }
 
   const gen     = document.getElementById('shellyGen').value;
   const channel = document.getElementById('shellyChannel').value;
   const action  = on ? 'on' : 'off';
+  const priceStr = triggerPrice !== undefined ? triggerPrice.toFixed(2) + 'p/kWh' : '—';
 
   try {
-    let url;
-    if (gen === '1') {
-      // Gen 1: GET /relay/{channel}?turn=on|off
-      url = `${baseUrl}/relay/${channel}?turn=${action}`;
+    if (gen === 'cloud' || isCloudUrl(rawUrl)) {
+      await shellyCloudSwitch(rawUrl, on, channel, action, priceStr);
+    } else if (gen === '1') {
+      // Gen 1 local: GET /relay/{ch}?turn=on|off
+      await fetch(`${rawUrl}/relay/${channel}?turn=${action}`, { mode: 'no-cors' });
+      setDeviceState(on);
+      setStatus(`✅ Shelly turned ${action.toUpperCase()} · ${priceStr}`, 'ok');
+      updateLastAction(on);
     } else {
-      // Gen 2+: POST /rpc/Switch.Set — but fetch GET for simplicity via query
-      url = `${baseUrl}/rpc/Switch.Set?id=${channel}&on=${on}`;
+      // Gen 2+ local: GET /rpc/Switch.Set?id={ch}&on=true|false
+      await fetch(`${rawUrl}/rpc/Switch.Set?id=${channel}&on=${on}`, { mode: 'no-cors' });
+      setDeviceState(on);
+      setStatus(`✅ Shelly turned ${action.toUpperCase()} · ${priceStr}`, 'ok');
+      updateLastAction(on);
     }
-
-    const resp = await fetch(url, { mode: 'no-cors' });
-    // no-cors means we won't see the response body, but command is sent
-    setDeviceState(on);
-    setStatus(`✅ Shelly turned ${action.toUpperCase()} · Price: ${triggerPrice !== undefined ? triggerPrice.toFixed(2) + 'p/kWh' : '—'}`, 'ok');
-
-    const lastActionEl = document.getElementById('lastAction');
-    if (lastActionEl) lastActionEl.textContent = `${on ? 'ON' : 'OFF'} at ${formatTime(new Date())}`;
-
   } catch (err) {
-    setStatus(`Failed to reach Shelly: ${err.message}. Check URL and that device is on the same network.`, 'error');
+    setStatus(`Failed: ${err.message}`, 'error');
     console.error('[Shelly]', err);
   }
 }
 
+async function shellyCloudSwitch(rawUrl, on, channel, action, priceStr) {
+  const { server, token, deviceId } = parseCloudUrl(rawUrl);
+
+  if (!deviceId) {
+    setStatus('⚠️ Could not decode device ID from cloud URL. Check the URL is correct.', 'error');
+    return;
+  }
+
+  // Shelly Cloud REST API — relay control
+  const body = new URLSearchParams({
+    id:       deviceId,
+    channel:  channel,
+    turn:     action,
+    auth_key: token,
+  });
+
+  const resp = await fetch(`${server}/device/relay/control`, {
+    method:  'POST',
+    mode:    'cors',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body:    body.toString(),
+  });
+
+  if (resp.ok) {
+    const data = await resp.json();
+    if (data.isok || data.data) {
+      setDeviceState(on);
+      setStatus(`✅ Cloud: Shelly turned ${action.toUpperCase()} · ${priceStr}`, 'ok');
+      updateLastAction(on);
+    } else {
+      setStatus(`⚠️ Cloud responded but reported an error: ${JSON.stringify(data)}`, 'warn');
+    }
+  } else {
+    const txt = await resp.text().catch(() => '');
+    setStatus(`Cloud API error ${resp.status}: ${txt || resp.statusText}`, 'error');
+  }
+}
+
 async function testShelly() {
-  const baseUrl = document.getElementById('shellyUrl').value.trim().replace(/\/$/, '');
-  if (!baseUrl) { setStatus('Enter your Shelly URL first.', 'warn'); return; }
+  const rawUrl = document.getElementById('shellyUrl').value.trim().replace(/\/$/, '');
+  if (!rawUrl) { setStatus('Enter your Shelly URL first.', 'warn'); return; }
 
   const gen = document.getElementById('shellyGen').value;
-  const statusUrl = gen === '1' ? `${baseUrl}/shelly` : `${baseUrl}/rpc/Shelly.GetDeviceInfo`;
+  setStatus('Testing connection…', '');
 
-  setStatus('Testing connection to Shelly…', '');
   try {
-    const resp = await fetch(statusUrl, { mode: 'cors' });
-    if (resp.ok) {
-      const data = await resp.json();
-      const model = data.model || data.type || data.app || 'Unknown model';
-      setStatus(`✅ Connected — ${model}`, 'ok');
+    if (gen === 'cloud' || isCloudUrl(rawUrl)) {
+      const { server, token, deviceId } = parseCloudUrl(rawUrl);
+      if (!deviceId) { setStatus('⚠️ Could not decode device ID from URL.', 'warn'); return; }
+
+      const body = new URLSearchParams({ id: deviceId, auth_key: token });
+      const resp = await fetch(`${server}/device/status`, {
+        method: 'POST', mode: 'cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        const model = data.data?.device_status?.model
+          || data.data?.model || 'Shelly Cloud Device';
+        setStatus(`✅ Cloud connected · ${model} · Device ID: ${deviceId}`, 'ok');
+      } else {
+        setStatus(`Cloud API ${resp.status} — check your URL is current.`, 'warn');
+      }
     } else {
-      setStatus(`Device responded with HTTP ${resp.status}`, 'warn');
+      const statusUrl = gen === '1'
+        ? `${rawUrl}/shelly`
+        : `${rawUrl}/rpc/Shelly.GetDeviceInfo`;
+      const resp = await fetch(statusUrl, { mode: 'cors' });
+      if (resp.ok) {
+        const data = await resp.json();
+        setStatus(`✅ Connected — ${data.model || data.type || data.app || 'Unknown'}`, 'ok');
+      } else {
+        setStatus(`Device HTTP ${resp.status}`, 'warn');
+      }
     }
   } catch (err) {
-    // Likely CORS/mixed-content — device is still reachable in most cases
-    setStatus(`⚠️ CORS blocked response, but device may be reachable. Try "Update Tariff Now" to send a command.`, 'warn');
+    setStatus(`⚠️ Request blocked (CORS/mixed-content). Device may still respond to commands — try "Update Tariff Now".`, 'warn');
   }
 }
 
@@ -340,6 +432,11 @@ function setDeviceState(on) {
   if (!dot) return;
   dot.className   = `device-dot ${on ? 'on' : 'off'}`;
   state.textContent = on ? 'ON' : 'OFF';
+}
+
+function updateLastAction(on) {
+  const el = document.getElementById('lastAction');
+  if (el) el.textContent = `${on ? 'ON' : 'OFF'} at ${formatTime(new Date())}`;
 }
 
 function setLiveDot(state) {
