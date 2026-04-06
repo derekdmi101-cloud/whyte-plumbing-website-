@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dual Smart Tariff | Whyte Plumbing & Heating</title>
+  <meta name="description" content="Live Octopus Agile electricity prices for your region. See when to run your heat pump or immersion heater on cheap off-peak rates.">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../" class="nav-logo">WHYTE <em>P&amp;H</em></a>
+  <div class="nav-right">
+    <span class="live-dot" id="liveDot"></span>
+    <span class="live-label">Live Prices</span>
+    <select id="regionNav" title="Select your DNO region">
+      <option value="N">North Scotland</option>
+      <option value="P">NW Scotland</option>
+      <option value="H">South Scotland</option>
+      <option value="A">Eastern England</option>
+      <option value="B">East Midlands</option>
+      <option value="C">London</option>
+      <option value="D">South East</option>
+      <option value="E">South England</option>
+      <option value="F">South Wales</option>
+      <option value="G">South West</option>
+      <option value="J">SE Midlands</option>
+      <option value="K">Yorkshire</option>
+      <option value="L">North West</option>
+      <option value="M">Merseyside/N.Wales</option>
+    </select>
+  </div>
+</nav>
+
+<!-- HERO / LIVE PRICE BANNER -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="grid-lines"></div>
+  </div>
+  <div class="hero-content">
+    <div class="eyebrow"><span class="eyebrow-line"></span>Octopus Agile · Live Tracker<span class="eyebrow-line"></span></div>
+    <h1>DUAL SMART<br><span class="fire">TARIFF</span></h1>
+    <p class="hero-sub">Real-time electricity prices for your region — know exactly when it's cheap to run your heating.</p>
+
+    <div class="price-hero-row" id="priceHeroRow">
+      <div class="price-big-card" id="priceNowCard">
+        <div class="pbig-label">Right Now</div>
+        <div class="pbig-val" id="priceNow">—</div>
+        <div class="pbig-unit">p/kWh inc. VAT</div>
+        <div class="pbig-badge" id="priceBadge">Loading…</div>
+      </div>
+      <div class="price-next-cards" id="priceNextCards">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <div class="hero-meta" id="heroMeta">Fetching live prices…</div>
+  </div>
+</section>
+
+<!-- PRICE CHART -->
+<section class="chart-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Today &amp; Tomorrow</div>
+      <h2>UPCOMING RATES</h2>
+      <p class="section-sub">Half-hourly prices for the next 24 hours. Green = cheap · Red = expensive.</p>
+    </div>
+    <div class="chart-wrap" id="chartWrap">
+      <div class="chart-loading" id="chartLoading">Loading price data…</div>
+      <div class="chart-bars" id="chartBars"></div>
+    </div>
+    <div class="chart-legend">
+      <span class="legend-dot cheap"></span>Under 10p — Very cheap (heat up now)
+      <span class="legend-dot mid"></span>10–20p — Standard
+      <span class="legend-dot exp"></span>Over 20p — Expensive (avoid if possible)
+    </div>
+  </div>
+</section>
+
+<!-- EXPLAINER -->
+<section class="explainer-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">How It Works</div>
+      <h2>MAKE YOUR HEATING<br><span class="fire">PAY LESS</span></h2>
+    </div>
+    <div class="explainer-grid">
+      <div class="exp-card">
+        <div class="exp-icon">🌙</div>
+        <h3>Cheap Off-Peak Rates</h3>
+        <p>Smart tariffs like Octopus Agile have prices that vary every 30 minutes. Overnight and at weekends prices often drop below 5p/kWh — sometimes even go negative.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">🔋</div>
+        <h3>Store the Heat</h3>
+        <p>Heat your hot water cylinder or buffer tank during cheap slots. A well-insulated cylinder holds heat for 24+ hours — so you're using free (or very cheap) hot water all day.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">🤖</div>
+        <h3>Automate It</h3>
+        <p>Pair a Shelly smart relay with this page to automatically switch your immersion heater or heat pump on when prices are low — and off when they spike.</p>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">💷</div>
+        <h3>Real Savings</h3>
+        <p>Customers shifting just 60% of their hot water heating to off-peak are saving £200–£600/year. Heat pump users save significantly more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHELLY CONTROL PANEL -->
+<section class="shelly-section" id="shellyPanel">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Smart Control</div>
+      <h2>SHELLY <span class="fire">CONTROL PANEL</span></h2>
+      <p class="section-sub">Connect your Shelly device to automatically switch based on live tariff prices.</p>
+    </div>
+
+    <div class="shelly-layout">
+      <div class="shelly-config card">
+        <h3>Configuration</h3>
+
+        <div class="field">
+          <label for="shellyUrl">Shelly Device URL</label>
+          <input id="shellyUrl" type="url" placeholder="http://192.168.1.100">
+          <small>Local IP of your Shelly device (e.g. Shelly Plus 1, Shelly 1PM)</small>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="shellyGen">Device Generation</label>
+            <select id="shellyGen">
+              <option value="1">Gen 1 (Shelly 1, 1PM, 2.5…)</option>
+              <option value="2">Gen 2+ (Shelly Plus, Pro…)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="shellyChannel">Channel</label>
+            <select id="shellyChannel">
+              <option value="0">0 (default)</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="threshold">Switch ON threshold (p/kWh)</label>
+          <input id="threshold" type="number" value="15" min="0" max="100" step="0.5">
+          <small>Shelly turns ON when price ≤ this value, OFF when above</small>
+        </div>
+
+        <div class="field">
+          <label class="toggle-label">
+            <input type="checkbox" id="autoRefresh" checked>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            Auto-update every 30 minutes
+          </label>
+        </div>
+
+        <div class="shelly-actions">
+          <button class="btn-fire" onclick="updateTariff()">⚡ Update Tariff Now</button>
+          <button class="btn-ghost" onclick="testShelly()">Test Connection</button>
+        </div>
+
+        <div class="status" id="status">Ready — enter your Shelly URL and press Update.</div>
+      </div>
+
+      <div class="shelly-status card" id="shellyStatusCard">
+        <h3>Device Status</h3>
+        <div class="device-indicator" id="deviceIndicator">
+          <div class="device-dot off" id="deviceDot"></div>
+          <div class="device-state" id="deviceState">Unknown</div>
+        </div>
+        <div class="device-stats" id="deviceStats">
+          <div class="dstat">
+            <span class="dstat-label">Last action</span>
+            <span class="dstat-val" id="lastAction">—</span>
+          </div>
+          <div class="dstat">
+            <span class="dstat-label">Price at trigger</span>
+            <span class="dstat-val" id="triggerPrice">—</span>
+          </div>
+          <div class="dstat">
+            <span class="dstat-label">Threshold</span>
+            <span class="dstat-val" id="thresholdDisplay">—</span>
+          </div>
+          <div class="dstat">
+            <span class="dstat-label">Next check</span>
+            <span class="dstat-val" id="nextCheck">—</span>
+          </div>
+        </div>
+        <div class="manual-btns">
+          <button class="btn-on" onclick="shellyOn()">Turn ON</button>
+          <button class="btn-off" onclick="shellyOff()">Turn OFF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <div class="cta-text">
+        <h2>Want your system set up for smart tariffs?</h2>
+        <p>We install and configure Shelly relays, smart immersion controllers, and heat pump schedules to work with Agile and other smart tariffs. Serving Kinross and the surrounding areas.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="tel:+447875373988" class="btn-fire">📞 Call David — 07875 373 988</a>
+        <a href="../#contact" class="btn-ghost">Free Quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">WHYTE <em>PLUMBING &amp; HEATING</em></span>
+    <span>Price data: <a href="https://octopus.energy" target="_blank" rel="noopener">Octopus Energy Agile API</a> · <a href="../">← Main site</a></span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
