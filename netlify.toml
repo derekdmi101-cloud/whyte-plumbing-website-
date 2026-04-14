@@ -1,0 +1,11 @@
+[[redirects]]
+  from = "http://whyteplumbingandheating.co.uk/*"
+  to = "https://whyteplumbingandheating.co.uk/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.whyteplumbingandheating.co.uk/*"
+  to = "https://whyteplumbingandheating.co.uk/:splat"
+  status = 301
+  force = true
