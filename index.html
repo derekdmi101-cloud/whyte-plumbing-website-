@@ -29,8 +29,10 @@ body { font-family: 'Barlow', sans-serif; background: var(--dark); color: var(--
 /* NAV */
 nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; padding: 0 3rem; height: 72px; display: flex; align-items: center; justify-content: space-between; background: rgba(10,15,26,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); transition: all 0.3s; }
 nav.scrolled { height: 60px; background: rgba(10,15,26,0.98); }
-.nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; color: var(--white); text-decoration: none; }
+.nav-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.3rem; letter-spacing: 3px; text-transform: uppercase; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 0.75rem; }
 .nav-logo em { color: var(--fire); font-style: normal; }
+.nav-logo-img { height: 56px; width: 56px; object-fit: contain; background: #000; border-radius: 7px; padding: 4px; border: 1px solid rgba(255,255,255,0.08); transition: transform 0.3s, box-shadow 0.3s; }
+.nav-logo:hover .nav-logo-img { transform: scale(1.05); box-shadow: 0 0 16px rgba(244,115,10,0.3); }
 .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
 .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.87rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; position: relative; }
 .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 2px; background: var(--fire); transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
@@ -119,7 +121,7 @@ nav.scrolled { height: 60px; background: rgba(10,15,26,0.98); }
 /* ═══ GALLERY ═══ */
 #gallery { background: #07111e; padding: 8rem 3rem; position: relative; }
 #gallery::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg,transparent,rgba(74,184,232,0.3),transparent); }
-.gallery-grid { max-width: 1200px; margin: 4rem auto 0; display: grid; grid-template-columns: repeat(4,1fr); grid-template-rows: 220px 220px; gap: 10px; }
+.gallery-grid { max-width: 1200px; margin: 4rem auto 0; display: grid; grid-template-columns: repeat(4,1fr); grid-auto-rows: 220px; gap: 10px; }
 .gallery-item { position: relative; overflow: hidden; border-radius: 6px; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); }
 .gallery-item.wide { grid-column: span 2; }
 .gallery-item.tall { grid-row: span 2; }
@@ -149,6 +151,9 @@ nav.scrolled { height: 60px; background: rgba(10,15,26,0.98); }
 .accred-card { display: flex; align-items: center; gap: 1.2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-left: 3px solid var(--fire); border-radius: 0 8px 8px 0; padding: 1.2rem 1.5rem; margin-bottom: 1rem; transition: all 0.3s; position: relative; overflow: hidden; }
 .accred-card:hover { transform: translateX(5px); }
 .accred-icon { font-size: 1.9rem; width: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.accred-logo { width: 64px; height: 64px; flex-shrink: 0; background: #fff; border-radius: 6px; padding: 6px; display: flex; align-items: center; justify-content: center; }
+.accred-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.accred-logo.dark { background: #0a0f1a; border: 1px solid rgba(255,255,255,0.1); }
 .accred-info strong { display: block; color: var(--white); font-size: 0.93rem; font-weight: 600; margin-bottom: 0.2rem; }
 .accred-info span { font-size: 0.78rem; color: rgba(255,255,255,0.38); }
 
@@ -188,6 +193,8 @@ nav.scrolled { height: 60px; background: rgba(10,15,26,0.98); }
 /* FOOTER */
 footer { background: #030810; padding: 2.5rem 3rem; border-top: 1px solid rgba(255,255,255,0.04); }
 .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.footer-brand { display: flex; align-items: center; gap: 1rem; }
+.footer-logo-img { height: 72px; width: 72px; object-fit: contain; background: #000; border-radius: 8px; padding: 6px; border: 1px solid rgba(244,115,10,0.25); flex-shrink: 0; }
 .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 1.15rem; letter-spacing: 3px; text-transform: uppercase; }
 .footer-logo em { color: var(--fire); font-style: normal; }
 footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; text-align: right; }
@@ -226,7 +233,7 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">WHYTE <em>PLUMBING &amp; HEATING</em></a>
+  <a href="#" class="nav-logo"><img src="images/img-10.jpeg" alt="Whyte Plumbing & Heating Ltd logo" class="nav-logo-img"><span>WHYTE <em>PLUMBING &amp; HEATING</em></span></a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#gallery">Our Work</a></li>
@@ -269,31 +276,18 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
     <div class="hero-mosaic">
       <!-- Tall left cell -->
       <div class="mosaic-cell tall">
-        <!--
-          TO ADD A PHOTO: Replace the img-ph div below with:
-          <img src="images/photo1.jpg" alt="Boiler installation">
-        -->
-        <div class="img-ph">
-          <div class="ph-icon">🔧</div>
-          Add Photo<br><small style="font-size:0.62rem;opacity:0.5;margin-top:4px;">e.g. boiler install</small>
-        </div>
-        <div class="mosaic-badge">Boiler Install</div>
+        <img src="images/img-13.jpeg" alt="Luxury bathroom installation">
+        <div class="mosaic-badge">Bathroom Fit</div>
       </div>
       <!-- Top right -->
       <div class="mosaic-cell">
-        <div class="img-ph">
-          <div class="ph-icon">🚿</div>
-          Add Photo
-        </div>
-        <div class="mosaic-badge">Bathroom Fit</div>
+        <img src="images/img-04.jpeg" alt="Air source heat pump installation">
+        <div class="mosaic-badge">Renewables</div>
       </div>
       <!-- Bottom right -->
       <div class="mosaic-cell">
-        <div class="img-ph">
-          <div class="ph-icon">☀️</div>
-          Add Photo
-        </div>
-        <div class="mosaic-badge">Renewables</div>
+        <img src="images/img-06.jpeg" alt="Boiler and hot water cylinder installation">
+        <div class="mosaic-badge">Boiler Install</div>
       </div>
     </div>
   </div>
@@ -303,13 +297,17 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
 <div class="ticker">
   <div class="ticker-inner">
     <span class="ticker-item">Gas Safe Registered <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">MCS Certified <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">RECC Approved Installer <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">NAPIT Electrical <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Approved Code Member <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Kinross &amp; Surrounding Areas <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Emergency Call-Outs 24/7 <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Free Quotes <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Gas Safe Registered <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">MCS Certified <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">RECC Approved Installer <span class="ticker-dot">◆</span></span>
+    <span class="ticker-item">NAPIT Electrical <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Approved Code Member <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Kinross &amp; Surrounding Areas <span class="ticker-dot">◆</span></span>
     <span class="ticker-item">Emergency Call-Outs 24/7 <span class="ticker-dot">◆</span></span>
@@ -381,53 +379,55 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
   </div>
 
   <div class="gallery-grid">
-    <!--
-    ════════════════════════════════════════════════════════
-    HOW TO ADD YOUR OWN JOB PHOTOS — IT'S SIMPLE!
-    ════════════════════════════════════════════════════════
-    1. Create a folder called "images" next to this file
-    2. Copy your photos in (e.g. job1.jpg, job2.jpg)
-    3. For each placeholder below, replace:
-         <div class="gallery-ph">...</div>
-       with:
-         <img src="images/job1.jpg" alt="Job description">
-    ════════════════════════════════════════════════════════
-    -->
     <div class="gallery-item wide reveal">
-      <div class="gallery-ph" style="height:220px;">
-        <div class="ph-icon">📸</div>
-        Add Your Photo Here<br><small style="font-size:0.62rem;opacity:0.45">Wide slot — bathroom, kitchen etc.</small>
-      </div>
+      <img src="images/img-12.jpeg" alt="Modern bathroom installation with twin sinks and walk-in shower">
       <div class="gallery-overlay"><div class="gallery-overlay-text">Bathroom Installation</div></div>
     </div>
     <div class="gallery-item tall reveal">
-      <div class="gallery-ph" style="height:452px;">
-        <div class="ph-icon">📸</div>
-        Add Your Photo Here<br><small style="font-size:0.62rem;opacity:0.45">Tall slot — boiler, pipework etc.</small>
-      </div>
-      <div class="gallery-overlay"><div class="gallery-overlay-text">Boiler Install</div></div>
+      <img src="images/img-03.jpeg" alt="Full plumbing and heating system">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Heating System</div></div>
     </div>
     <div class="gallery-item reveal">
-      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
-      <div class="gallery-overlay"><div class="gallery-overlay-text">Central Heating</div></div>
+      <img src="images/img-01.jpeg" alt="Air source heat pump array">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Air Source Heat Pump</div></div>
     </div>
     <div class="gallery-item reveal">
-      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
+      <img src="images/img-14.jpeg" alt="Freestanding bath installation">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Bathroom Fit</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <img src="images/img-05.jpeg" alt="Pipework and manifold">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Pipework</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <img src="images/img-08.jpeg" alt="Underfloor heating manifold">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Underfloor Heating</div></div>
+    </div>
+    <div class="gallery-item wide reveal">
+      <img src="images/img-16.jpeg" alt="Modern bathroom with freestanding bath">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Modern Bathroom</div></div>
+    </div>
+    <div class="gallery-item tall reveal">
+      <img src="images/img-07.jpeg" alt="Plumbing and control system">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Plumbing System</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <img src="images/img-02.jpeg" alt="Twin air source heat pumps">
       <div class="gallery-overlay"><div class="gallery-overlay-text">Heat Pump Install</div></div>
     </div>
     <div class="gallery-item reveal">
-      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
-      <div class="gallery-overlay"><div class="gallery-overlay-text">Plumbing Works</div></div>
+      <img src="images/img-15.jpeg" alt="Dark modern en-suite">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">En-Suite Fit</div></div>
     </div>
     <div class="gallery-item reveal">
-      <div class="gallery-ph" style="height:220px;"><div class="ph-icon">📸</div>Add Photo</div>
-      <div class="gallery-overlay"><div class="gallery-overlay-text">Bathroom Fit</div></div>
+      <img src="images/img-09.jpeg" alt="Solar thermal panel installation">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Solar Thermal</div></div>
+    </div>
+    <div class="gallery-item reveal">
+      <img src="images/img-11.jpeg" alt="Freestanding bath with countryside view">
+      <div class="gallery-overlay"><div class="gallery-overlay-text">Freestanding Bath</div></div>
     </div>
   </div>
-
-  <p class="gallery-note" style="margin-top:1.5rem;">
-    📁 <strong style="color:rgba(255,255,255,0.45);">To add your photos:</strong> Create an <code>images/</code> folder next to this file → add your photos → swap each placeholder with <code>&lt;img src="images/yourphoto.jpg" alt="Job description"&gt;</code>
-  </p>
 </section>
 
 <!-- ABOUT -->
@@ -447,8 +447,9 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
     </div>
     <div class="about-right">
       <div class="accred-card reveal"><div class="accred-icon">🔥</div><div class="accred-info"><strong>Gas Safe Registered</strong><span>Legally qualified to work on all gas appliances and systems</span></div></div>
-      <div class="accred-card reveal"><div class="accred-icon">☀️</div><div class="accred-info"><strong>RECC Certified Installer</strong><span>Renewable Energy Consumer Code — your protection when going green</span></div></div>
-      <div class="accred-card reveal"><div class="accred-icon">🛡️</div><div class="accred-info"><strong>Approved Code Scheme Member</strong><span>Chartered Trading Standards backed — fair treatment guaranteed</span></div></div>
+      <div class="accred-card reveal"><div class="accred-logo"><img src="images/recc-ctsi-code-logo-colour-vertical.jpg" alt="RECC and Trading Standards Approved Code logo"></div><div class="accred-info"><strong>RECC &amp; Approved Code</strong><span>Renewable Energy Consumer Code · Chartered Trading Standards backed</span></div></div>
+      <div class="accred-card reveal"><div class="accred-logo dark"><img src="images/MCSCertifiedMark_WHITE_RGB.png" alt="MCS Certified Mark"></div><div class="accred-info"><strong>MCS Certified</strong><span>Microgeneration Certification Scheme — quality-assured renewables installer</span></div></div>
+      <div class="accred-card reveal"><div class="accred-logo"><img src="images/NAPIT_electrical_web.jpg" alt="NAPIT Electrical logo"></div><div class="accred-info"><strong>NAPIT Electrical Registered</strong><span>Competent electrical installer — certified and insured</span></div></div>
       <div class="accred-card reveal"><div class="accred-icon">🏢</div><div class="accred-info"><strong>Companies House Registered</strong><span>Company No. SC530348 · Active since 2016</span></div></div>
       <div class="accred-card reveal"><div class="accred-icon">📍</div><div class="accred-info"><strong>Based in Kinnesswood, Kinross</strong><span>Serving Kinross, Perth, Fife and surrounding areas</span></div></div>
     </div>
@@ -496,9 +497,9 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
         <div class="contact-item-icon">📞</div>
         <div><strong>Mobile</strong><span>+44 7875 373 988</span></div>
       </a>
-      <a href="mailto:David@whyteplumbing-heatingltd.com" class="contact-item">
+      <a href="mailto:whyte12sd@gmail.com" class="contact-item">
         <div class="contact-item-icon">✉️</div>
-        <div><strong>Email</strong><span>David@whyteplumbing-heatingltd.com</span></div>
+        <div><strong>Email</strong><span>whyte12sd@gmail.com</span></div>
       </a>
       <div class="contact-item">
         <div class="contact-item-icon">📍</div>
@@ -541,11 +542,14 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
-    <div>
-      <div class="footer-logo">WHYTE <em>PLUMBING &amp; HEATING</em> LTD</div>
-      <p style="text-align:left;margin-top:0.3rem;">Kinnesswood, Kinross, KY13 9HN · Company No. SC530348</p>
+    <div class="footer-brand">
+      <img src="images/img-10.jpeg" alt="Whyte Plumbing & Heating Ltd logo" class="footer-logo-img">
+      <div>
+        <div class="footer-logo">WHYTE <em>PLUMBING &amp; HEATING</em> LTD</div>
+        <p style="text-align:left;margin-top:0.3rem;">Kinnesswood, Kinross, KY13 9HN · Company No. SC530348</p>
+      </div>
     </div>
-    <p>Gas Safe Registered · RECC Approved · Approved Code Scheme Member<br>© 2025 Whyte Plumbing &amp; Heating Ltd. All rights reserved.</p>
+    <p>Gas Safe · MCS Certified · RECC Approved · NAPIT Electrical · Approved Code Scheme<br>© 2026 Whyte Plumbing &amp; Heating Ltd. All rights reserved.</p>
   </div>
 </footer>
 
