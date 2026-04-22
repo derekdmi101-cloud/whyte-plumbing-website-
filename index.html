@@ -187,8 +187,13 @@ nav.scrolled { height: 60px; background: rgba(10,15,26,0.98); }
 .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.18); }
 .form-group select option { background: #0d1525; }
 .form-group textarea { resize: vertical; min-height: 115px; }
-.form-submit { background: var(--fire); color: var(--white); border: none; border-radius: 4px; padding: 1.1rem 2rem; font-family: 'Barlow', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s; position: relative; }
+.form-submit { background: var(--fire); color: var(--white); border: none; border-radius: 4px; padding: 1.1rem 2rem; font-family: 'Barlow', sans-serif; font-size: 0.95rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; transition: all 0.3s; position: relative; cursor: pointer; }
 .form-submit:hover { box-shadow: 0 0 28px rgba(244,115,10,0.55); transform: translateY(-2px); }
+.form-submit:disabled { opacity: 0.6; cursor: wait; }
+.form-status { font-size: 0.85rem; color: rgba(255,255,255,0.75); margin-top: 0.2rem; min-height: 1.2rem; }
+.form-status.success { color: #5bd19a; }
+.form-status.error { color: #ff6b6b; }
+.hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
 
 /* FOOTER */
 footer { background: #030810; padding: 2.5rem 3rem; border-top: 1px solid rgba(255,255,255,0.04); }
@@ -514,15 +519,17 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
         <div><strong>Coverage</strong><span>Kinross · Perth · Fife · Tayside</span></div>
       </div>
     </div>
-    <div class="contact-form">
+    <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
+      <input type="hidden" name="form-name" value="contact">
+      <p class="hp-field"><label>Don't fill this out: <input name="bot-field"></label></p>
       <div class="form-row">
-        <div class="form-group"><label>Your Name</label><input type="text" placeholder="John Smith"></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="07700 000 000"></div>
+        <div class="form-group"><label for="cf-name">Your Name</label><input id="cf-name" type="text" name="name" placeholder="John Smith" required></div>
+        <div class="form-group"><label for="cf-phone">Phone Number</label><input id="cf-phone" type="tel" name="phone" placeholder="07700 000 000" required></div>
       </div>
-      <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com"></div>
+      <div class="form-group"><label for="cf-email">Email Address</label><input id="cf-email" type="email" name="email" placeholder="your@email.com" required></div>
       <div class="form-group">
-        <label>Service Needed</label>
-        <select>
+        <label for="cf-service">Service Needed</label>
+        <select id="cf-service" name="service">
           <option value="">Select a service...</option>
           <option>Plumbing Repair</option>
           <option>Boiler Installation / Service</option>
@@ -533,9 +540,10 @@ footer p { font-size: 0.76rem; color: rgba(255,255,255,0.22); line-height: 1.7; 
           <option>Other / Not Sure</option>
         </select>
       </div>
-      <div class="form-group"><label>About The Job</label><textarea placeholder="Briefly describe what you need..."></textarea></div>
-      <button class="form-submit" onclick="alert('Thanks! David will be in touch shortly.\n\nFor urgent jobs call: 07875 373 988')">Send Enquiry →</button>
-    </div>
+      <div class="form-group"><label for="cf-message">About The Job</label><textarea id="cf-message" name="message" placeholder="Briefly describe what you need..." required></textarea></div>
+      <button class="form-submit" type="submit">Send Enquiry →</button>
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+    </form>
   </div>
 </section>
 
@@ -581,6 +589,32 @@ for(let i=0;i<18;i++){
 // Scroll reveal
 const obs=new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Contact form — AJAX submit to Netlify so user stays on page
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const status = document.getElementById('formStatus');
+    const btn = contactForm.querySelector('.form-submit');
+    const data = new URLSearchParams(new FormData(contactForm)).toString();
+    btn.disabled = true;
+    status.className = 'form-status';
+    status.textContent = 'Sending…';
+    try {
+      const res = await fetch('/', { method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: data });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      status.className = 'form-status success';
+      status.textContent = 'Thanks! David will be in touch shortly. For urgent jobs call 07875 373 988.';
+      contactForm.reset();
+    } catch (err) {
+      status.className = 'form-status error';
+      status.innerHTML = 'Something went wrong. Please call <strong>07875 373 988</strong> or email <strong>whyte12sd@gmail.com</strong>.';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
 </script>
 </body>
 </html>
